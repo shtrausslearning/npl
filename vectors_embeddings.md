@@ -57,6 +57,7 @@ re.sub('\s+', ' ', text)
 text = 'Купите кружку-термос на 0.5л (64см³) за 3 рубля. До 01.01.2050.'
 ```
 
+ (a) <code>.split()</code> подход
 - По дефолту использует **" "**
 
 ```python
@@ -76,6 +77,7 @@ text.split()
  '01.01.2050.']
  ```
 
+ (b) Библиотека <code>ntlk</code>
 - В библиотеке для морфологического анализа для русского языка
 - pymorphy2 есть простая вспомогательная функция <code>simple_word_tokenize</code> для токенизации
 
@@ -109,6 +111,7 @@ simple_word_tokenize(text)
  '.']
  ```
  
+ (c) Библиотека <code>ntlk</code>
 - Более сложной метод токенизации представлен в <code>nltk</code> (общего NLP)
 - Используем метод <code>sent_tokenize</code>
 
@@ -159,3 +162,87 @@ sentences=sent_tokenize(text)
   '.'],
  ['До', '01', '.', '01', '.', '2050', '.']]
  ```
+ 
+ (d) Библиотека <code>razdel</code>
+ - Для русского языка также есть новая специализированная библиотека <code>razdel</code>
+ 
+ ```python
+ import razdel
+
+sents=[]
+for sentence in razdel.sentenize(text):
+    sents.append(sentence.text)
+    
+sents
+```
+
+```
+['Купите кружку-термос на 0.5л (64см³) за 3 рубля.', 'До 01.01.2050.']
+```
+
+```python
+sentences = [sentence.text for sentence in razdel.sentenize(text)]
+tokens = [ [token.text for token in razdel.tokenize(sentence)] for sentence in sentences ]
+```
+
+```
+[['Купите',
+  'кружку-термос',
+  'на',
+  '0.5',
+  'л',
+  '(',
+  '64',
+  'см³',
+  ')',
+  'за',
+  '3',
+  'рубля',
+  '.'],
+ ['До', '01.01.2050', '.']]
+```
+
+```python
+razdel.tokenize
+```
+
+```
+TokenSegmenter(TokenSplitter(),
+               [DashRule(),
+                UnderscoreRule(),
+                FloatRule(),
+                FractionRule(),
+                FunctionRule('punct'),
+                FunctionRule('other'),
+                FunctionRule('yahoo')])
+```
+
+```python
+import razdel
+
+def tokenize_with_razdel(text):
+    sentences = [sentence.text for sentence in razdel.sentenize(text)]
+    tokens = [ [token.text for token in razdel.tokenize(sentence)] for sentence in sentences ]
+    
+    return tokens
+
+tokenize_with_razdel(text)
+```
+
+```
+[['Купите',
+  'кружку-термос',
+  'на',
+  '0.5',
+  'л',
+  '(',
+  '64',
+  'см³',
+  ')',
+  'за',
+  '3',
+  'рубля',
+  '.'],
+ ['До', '01.01.2050', '.']]
+ ```
+ 
