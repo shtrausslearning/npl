@@ -339,3 +339,62 @@ pymorphy.parse('директора')
  ```
  
  - Библиотека от Яндекса `mystem3` обходит это ограничение и рассматривает контекст слова, используя статистику и правила.
+
+```python
+from pymystem3 import Mystem
+
+mystem = Mystem()
+
+def lemmatize_with_mystem(text):
+    lemms=[token for token in mystem.lemmatize(text) if token!=' '][:-1]
+    
+    return  lemms
+    
+lemmatize_with_mystem('бегал бежал ')
+```
+
+```
+['бегать', 'бежать']
+```
+
+```python
+[token for token in mystem.lemmatize('бежал бежал') if token!=' '][:-1]
+```
+
+```
+['бежать', 'бежать']
+```
+
+#### 5. Представление Текста
+
+- Как можно использовать токенизированные тексты в задачах NLP?
+- Какие варианты представления текста можете назвать?
+  - Label Encoder
+  - One-Hot Encoder 
+  - Bag-of-Words
+
+#### **Label Encoder**
+
+```python
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder
+
+words = ['NLP', 'is', 'awesome']
+
+label_encoder = LabelEncoder()
+corpus_encoded = label_encoder.fit_transform(words)
+```
+
+```
+array([0, 2, 1])
+```
+
+```python
+onehot_encoder = OneHotEncoder(sparse=False)
+onehot_encoder.fit_transform(corpus_encoded.reshape(-1, 1))
+```
+
+```
+array([[1., 0., 0.],
+       [0., 0., 1.],
+       [0., 1., 0.]])
+```
