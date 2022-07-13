@@ -391,6 +391,7 @@ lemmatize_with_mystem('бегал бежал ')
   - Label Encoder
   - One-Hot Encoder 
   - Bag-of-Words
+  - TF-IDF
 
 #### **Label Encoder**
 
@@ -561,11 +562,11 @@ from sklearn.svm import LinearSVC
 from sklearn.metrics import classification_report
 
 # Создание модели классификации
-def evaluate_vectorizer(vectorizer):
+def evaluate_vectoriser(vectoriser):
 
     # Preprocess
-    train_vectors = vectorizer.fit_transform(train['text'])
-    test_vectors = vectorizer.transform(test['text'])
+    train_vectors = vectoriser.fit_transform(train['text'])
+    test_vectors = vectoriser.transform(test['text'])
     
     # Train & Predict
     clf = LinearSVC(random_state=42)
@@ -578,6 +579,10 @@ def evaluate_vectorizer(vectorizer):
     return predictions
   
 ```
+
+#### 3. Сравнение способов представления текста
+
+#### Подход 1 : <code>CountVectorizer<code>
 
 ```python
 evaluate_vectorizer(CountVectorizer(min_df=2));
@@ -592,4 +597,16 @@ evaluate_vectorizer(CountVectorizer(min_df=2));
     accuracy                           0.80       794
    macro avg       0.78      0.75      0.76       794
 weighted avg       0.80      0.80      0.80       794
+```
+
+#### Подход 2 : `TfidfVectorizer`
+  
+```python
+evaluate_vectorizer(TfidfVectorizer(min_df=2));
+
+```python
+def tokenize_with_razdel(text):
+    tokens = [token.text for token in razdel.tokenize(text)]
+    
+    return tokens
 ```
