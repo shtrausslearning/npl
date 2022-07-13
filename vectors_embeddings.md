@@ -85,3 +85,77 @@ from pymorphy2.tokenizers import simple_word_tokenize
 simple_word_tokenize(text)
 
 ```
+
+```
+['Купите',
+ 'кружку-термос',
+ 'на',
+ '0',
+ '.',
+ '5л',
+ '(',
+ '64см³',
+ ')',
+ 'за',
+ '3',
+ 'рубля',
+ '.',
+ 'До',
+ '01',
+ '.',
+ '01',
+ '.',
+ '2050',
+ '.']
+ ```
+ 
+- Более сложной метод токенизации представлен в <code>nltk</code> (общего NLP)
+- Используем метод <code>sent_tokenize</code>
+
+```python
+from nltk import sent_tokenize, word_tokenize, wordpunct_tokenize
+
+sentences=sent_tokenize(text)
+```
+
+```python
+[word_tokenize(sentence) for sentence in sentences]
+```
+
+```
+[['Купите',
+  'кружку-термос',
+  'на',
+  '0.5л',
+  '(',
+  '64см³',
+  ')',
+  'за',
+  '3',
+  'рубля',
+  '.'],
+ ['До', '01.01.2050', '.']]
+ ```
+
+```
+[wordpunct_tokenize(sentence) for sentence in sentences]
+```
+
+```
+[['Купите',
+  'кружку',
+  '-',
+  'термос',
+  'на',
+  '0',
+  '.',
+  '5л',
+  '(',
+  '64см³',
+  ')',
+  'за',
+  '3',
+  'рубля',
+  '.'],
+ ['До', '01', '.', '01', '.', '2050', '.']]
+ ```
