@@ -582,7 +582,7 @@ def evaluate_vectoriser(vectoriser):
 
 #### 3. Сравнение способов представления текста
 
-#### Подход 1 : <code>CountVectorizer<code>
+#### Подход 1 : `CountVectorizer`
 
 ```python
 evaluate_vectorizer(CountVectorizer(min_df=2));
@@ -602,11 +602,98 @@ weighted avg       0.80      0.80      0.80       794
 #### Подход 2 : `TfidfVectorizer`
   
 ```python
-evaluate_vectorizer(TfidfVectorizer(min_df=2));
+evaluate_vectoriser(TfidfVectorizer(min_df=2));
+```
+
+```
+              precision    recall  f1-score   support
+
+    negative       0.76      0.65      0.70       258
+    positive       0.84      0.90      0.87       536
+
+    accuracy                           0.82       794
+   macro avg       0.80      0.78      0.79       794
+weighted avg       0.82      0.82      0.82       794
+```
+
+#### Подход 3 : `TfidfVectorizer` + `tokenizer=tokenize_with_razdel`
 
 ```python
 def tokenize_with_razdel(text):
-    tokens = [token.text for token in razdel.tokenize(text)]
-    
-    return tokens
+    return [token.text for token in razdel.tokenize(text)] # tokens
+```
+
+```python
+evaluate_vectoriser(TfidfVectorizer(min_df=2,
+                                    tokenizer=tokenize_with_razdel));
+```
+
+#### Подход 4 : `TfidfVectorizer` + `lemmatize_with_pymorphy(tokenize_with_razdel(text)`
+
+```python
+tfidf_vectorizer = TfidfVectorizer(
+    min_df=2, 
+    tokenizer=lambda text: lemmatize_with_pymorphy(tokenize_with_razdel(text)),
+)
+
+predictions=evaluate_vectorizer(tfidf_vectorizer)
+```
+
+```
+              precision    recall  f1-score   support
+
+    negative       0.85      0.79      0.82       258
+    positive       0.90      0.93      0.92       536
+
+    accuracy                           0.89       794
+   macro avg       0.88      0.86      0.87       794
+weighted avg       0.89      0.89      0.89       794
+```
+
+
+#### Подход 5 : `TfidfVectorizer` + `tokenizer` + `stop_words`
+
+```python
+tfidf_vectorizer = TfidfVectorizer(
+    min_df=2, 
+    tokenizer=lambda text: lemmatize_with_pymorphy(tokenize_with_razdel(text)),
+    stop_words=stopwords
+)
+
+evaluate_vectorizer(tfidf_vectorizer)
+```
+
+```
+              precision    recall  f1-score   support
+
+    negative       0.83      0.75      0.79       258
+    positive       0.89      0.93      0.91       536
+
+    accuracy                           0.87       794
+   macro avg       0.86      0.84      0.85       794
+weighted avg       0.87      0.87      0.87       794
+```
+
+#### Подход 5 : `TfidfVectorizer` + `tokenizer` + `stop_words` + `ngram_range`
+
+```python
+tfidf_vectorizer = TfidfVectorizer(
+    min_df=2, 
+    tokenizer=lambda text: lemmatize_with_pymorphy(tokenize_with_razdel(text)),
+    stop_words=stopwords,
+    ngram_range=(1, 2)
+)
+
+evaluate_vectorizer(tfidf_vectorizer)
+```
+
+```
+              precision    recall  f1-score   support
+
+    negative       0.84      0.78      0.81       258
+    positive       0.90      0.93      0.91       536
+
+    accuracy                           0.88       794
+   macro avg       0.87      0.85      0.86       794
+weighted avg       0.88      0.88      0.88       794
 ```
