@@ -53,11 +53,11 @@ re.sub('\s+', ' ', text)
 - Самый простой подход к токенизации
   - это разбиение по текста по **пробельным** символам
 
-Рассмотрим 4 способа:
--  <code>.split()</code> подход
--  Библиотека <code>pymorphy2</code> 
--  Библиотека <code>ntlk</code> 
--  Библиотека <code>razdel</code>
+- Рассмотрим 4 способа:
+  -  <code>.split()</code> подход
+  -  Библиотека <code>pymorphy2</code> 
+  -  Библиотека <code>ntlk</code> 
+  -  Библиотека <code>razdel</code>
 
 ```python
 text = 'Купите кружку-термос на 0.5л (64см³) за 3 рубля. До 01.01.2050.'
@@ -252,3 +252,62 @@ tokenize_with_razdel(text)
  ['До', '01.01.2050', '.']]
  ```
  
+#### 4. Приведение слов к нормальной форме (стемминг/лемматизация)
+
+- <code>Стемминг</code> - это нормализация слова путём отбрасывания окончания по правилам языка
+  - Такая нормализация хорошо подходит для языков с небольшим разнообразием словоформ, (английского).
+  - В библиотеке nltk есть несколько реализаций стеммеров:
+    - Porter stemmer
+    - Snowball stemmer
+    - Lancaster stemmer
+  
+```python
+from nltk.stem.snowball import SnowballStemmer
+SnowballStemmer(language='english').stem('running')
+```
+
+```
+'run'
+```
+  
+- Для русского языка этот подход не очень подходит, поскольку в русском есть:
+  - **падежные формы**, **время у глаголов** и т.д.
+    
+```python
+SnowballStemmer(language='russian').stem('бежать')
+```
+
+```
+'бежа'
+```
+   
+- <code>Лемматизация</code> - приведение слов к начальной морфологической форме (с помощью словаря и грамматики языка)
+  - Самый простой подход к лемматизации <code>словарный</code>. 
+  - Здесь не учитывается контекст слова, поэтому для омонимов такой подход работает не всегда. 
+  - Такой подход применяет библиотека <code>pymorphy2</code>
+
+```
+from pymorphy2 import MorphAnalyzer
+
+pymorphy = MorphAnalyzer()
+pymorphy.parse('бежал')
+```
+
+```
+[Parse(word='бежал', tag=OpencorporaTag('VERB,perf,intr masc,sing,past,indc'), normal_form='бежать', score=0.5, methods_stack=((DictionaryAnalyzer(), 'бежал', 392, 1),)),
+ Parse(word='бежал', tag=OpencorporaTag('VERB,impf,intr masc,sing,past,indc'), normal_form='бежать', score=0.5, methods_stack=((DictionaryAnalyzer(), 'бежал', 392, 49),))]
+```
+
+```python
+def lemmatize_with_pymorphy(tokens):
+    lemms = [pymorphy.parse(token)[0].normal_form for token in tokens]
+    return lemms
+```
+
+```python
+lemmatize_with_pymorphy(['бегут', 'бежал', 'бежите'])
+```
+
+```
+['бежать', 'бежать', 'бежать']
+```
