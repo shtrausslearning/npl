@@ -392,6 +392,8 @@ corpus_encoded = label_encoder.fit_transform(words)
 array([0, 2, 1])
 ```
 
+#### **One-Hot Encoding (OHE)**
+
 ```python
 onehot_encoder = OneHotEncoder(sparse=False)
 onehot_encoder.fit_transform(corpus_encoded.reshape(-1, 1))
@@ -402,6 +404,10 @@ array([[1., 0., 0.],
        [0., 0., 1.],
        [0., 1., 0.]])
 ```
+
+#### **Bag of Words**
+
+- 4 текста, **один набор слов**, посчитаем количество слов в текстах <code>CountVectorizer</code>
 
 ```python
 corpus = [
@@ -429,6 +435,53 @@ matrix([[0, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0],
 
 ```
 vectorizer.vocabulary_
+```
+
+```
+{'девочка': 2,
+ 'любит': 8,
+ 'кота': 6,
+ 'ваську': 1,
+ 'тот': 10,
+ 'кто': 7,
+ 'не': 9,
+ 'знает': 4,
+ 'его': 3,
+ 'кого': 5,
+ 'васька': 0}
+```
+
+#### **TF-IDF**
+
+- **Term Frequency**  $tf(w,d)$ - сколько раз слово $w$ встретилось в документе $d$
+- **Document Frequency** $df(w)$ - сколько документов содержат слово $w$
+- **Inverse Document Frequency** $idf(w) = log_2(N/df(w))$  — обратная документная частотность. 
+- **TF-IDF**=$tf(w,d)*idf(w)$
+
+```python
+from sklearn.feature_extraction.text import TfidfVectorizer
+idf_vectorizer=TfidfVectorizer()
+vectors = idf_vectorizer.fit_transform(corpus)
+vectors.todense()
+```
+
+```
+matrix([[0.        , 0.58783765, 0.46345796, 0.        , 0.        ,
+         0.        , 0.58783765, 0.        , 0.30675807, 0.        ,
+         0.        ],
+        [0.        , 0.        , 0.        , 0.36332075, 0.36332075,
+         0.        , 0.        , 0.5728925 , 0.37919167, 0.36332075,
+         0.36332075],
+        [0.        , 0.        , 0.        , 0.        , 0.        ,
+         0.72664149, 0.        , 0.5728925 , 0.37919167, 0.        ,
+         0.        ],
+        [0.72664149, 0.        , 0.5728925 , 0.        , 0.        ,
+         0.        , 0.        , 0.        , 0.37919167, 0.        ,
+         0.        ]])
+```
+
+```python
+idf_vectorizer.vocabulary_
 ```
 
 ```
