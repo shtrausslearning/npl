@@ -508,11 +508,14 @@ idf_vectorizer.vocabulary_
 
 ### 6. Классификация
 
+#### 6.1 Загрузка тренировочных и тестовых данных
+
 ```python
 
 import pandas as pd
 
 train = pd.read_csv('../input/lecture-5-embeddings/train.csv')
+test = pd.read_csv('../input/lecture-5-embeddings/test.csv')
 train.head()
 
 ```
@@ -523,4 +526,63 @@ train.head()
 |  2 | positive | ♥Обожаю людей, которые заставляют меня смеяться.©♥                                                                                            |
 |  3 | negative | Вчера нашла в почтовом ящике пустую упаковку из-под жвачки и использованный презерватив в упаковке. Могли бы хоть "резинку" не портить, гады. |
 |  4 | positive | очень долгожданный и хороший день был)                                                                                                        |
+```
+
+- Распределение классов
+
+```python
+train.label.value_counts(normalize=True)
+```
+
+```
+positive    0.668928
+negative    0.331072
+Name: label, dtype: float64
+```
+
+#### 6.2 Построение модели
+
+- Напишем функцию для оценки **векторизатора**
+- В качестве модели будем использовать **линейный SVM**, он хорошо работает для определения тональности
+
+```python
+
+%matplotlib inline
+
+import tqdm
+from sklearn.svm import LinearSVC
+from sklearn.metrics import classification_report
+
+# Создание модели классификации
+def evaluate_vectorizer(vectorizer):
+
+    # Preprocess
+    train_vectors = vectorizer.fit_transform(train['text'])
+    test_vectors = vectorizer.transform(test['text'])
+    
+    # Train & Predict
+    clf = LinearSVC(random_state=42)
+    clf.fit(train_vectors, train['label'])
+    predictions = clf.predict(test_vectors)
+    
+    # Classification Report
+    print(classification_report(test['label'], predictions))
+    
+    return predictions
+  
+```
+
+```python
+evaluate_vectorizer(CountVectorizer(min_df=2));
+```
+
+```
+              precision    recall  f1-score   support
+
+    negative       0.73      0.62      0.67       258
+    positive       0.83      0.89      0.86       536
+
+    accuracy                           0.80       794
+   macro avg       0.78      0.75      0.76       794
+weighted avg       0.80      0.80      0.80       794
 ```
