@@ -16,6 +16,54 @@
 В базовом ритоне можно работать с `string`, `.lower()`, `.upper()` ...
 
 ```python
+ 'capitalize',
+ 'casefold',
+ 'center',
+ 'count',
+ 'encode',
+ 'endswith',
+ 'expandtabs',
+ 'find',
+ 'format',
+ 'format_map',
+ 'index',
+ 'isalnum',
+ 'isalpha',
+ 'isascii',
+ 'isdecimal',
+ 'isdigit',
+ 'isidentifier',
+ 'islower',
+ 'isnumeric',
+ 'isprintable',
+ 'isspace',
+ 'istitle',
+ 'isupper',
+ 'join',
+ 'ljust',
+ 'lower',
+ 'lstrip',
+ 'maketrans',
+ 'partition',
+ 'replace',
+ 'rfind',
+ 'rindex',
+ 'rjust',
+ 'rpartition',
+ 'rsplit',
+ 'rstrip',
+ 'split',
+ 'splitlines',
+ 'startswith',
+ 'strip',
+ 'swapcase',
+ 'title',
+ 'translate',
+ 'upper',
+ 'zfill']
+```
+
+```python
 text = 'Способность эффективно обрабатывать данные с  \n большим числом признаков и классов... '
 ```
 
@@ -29,6 +77,8 @@ text
 ```
 
 ### 2. Удаление неинформативных символов
+
+- Regular Expression можно использовать для 
 
 ```python
 import re
