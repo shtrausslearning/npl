@@ -66,8 +66,6 @@ text.split()
 ```
 ['Купите',
  'кружку-термос',
- '"Hello',
- 'Kitty"',
  'на',
  '0.5л',
  '(64см³)',
@@ -78,3 +76,12 @@ text.split()
  '01.01.2050.']
  ```
 
+- В библиотеке для морфологического анализа для русского языка
+- pymorphy2 есть простая вспомогательная функция <code>simple_word_tokenize</code> для токенизации
+
+```python
+from pymorphy2.tokenizers import simple_word_tokenize
+
+simple_word_tokenize(text)
+
+```
